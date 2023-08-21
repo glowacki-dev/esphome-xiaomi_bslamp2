@@ -57,12 +57,24 @@ script:
             - front_panel.turn_on_leds: [ POWER ]
       - front_panel.update_leds:
 
+# Enable realtime effects. Let's use e131 because wled requires arduino framework which doesn't seem to work for this device
+e131:
+
 # This component controls the LED lights of the lamp.
 light:
+  - platform: partition
+    name: ${light_name}
+    segments:
+      - single_light_id: my_light
+    effects:
+      - e131:
+          universe: 1
+          channels: RGBW
   - platform: xiaomi_bslamp2
     id: my_light
     name: ${light_name}
     default_transition_length: ${default_transition_length}
+    internal: true
 
     # When the brightness changes, update the front panel illumination.
     on_brightness:
