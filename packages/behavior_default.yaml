@@ -64,7 +64,7 @@ e131:
 light:
   - platform: partition
     id: my_light_e131
-    name: ${light_name}
+    name: ${light_name} E131
     segments:
       - single_light_id: my_light
     # You can use any effects that you like. These are just examples.
@@ -75,8 +75,9 @@ light:
           channels: RGBW
   - platform: xiaomi_bslamp2
     id: my_light
+    name: ${light_name}
     default_transition_length: ${default_transition_length}
-    internal: true
+    #internal: true
     # When the brightness changes, update the front panel illumination.
     on_brightness:
       then:
