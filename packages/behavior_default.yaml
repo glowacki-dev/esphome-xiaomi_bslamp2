@@ -85,6 +85,18 @@ light:
             id: current_brightness
             value: !lambda return x;
         - script.execute: update_front_panel
+
+    # You can use any effects that you like. These are just examples.
+    effects:
+      - random:
+          name: "Slow Random"
+          transition_length: 30s
+          update_interval: 30s
+      - random:
+          name: "Fast Random"
+          transition_length: 3s
+          update_interval: 3s
+
     # You can define one or more groups of presets. These presets can
     # be activated using various "preset.activate" action options.
     # The presets can for example be used to mimic the behavior of the
@@ -94,7 +106,12 @@ light:
     # the color button.
     presets:
       rgb:
-        e131:        { effect: e131                       }
+        red:         { red: 100%, green: 0%,   blue: 0%   }
+        green:       { red: 0%,   green: 100%, blue: 0%   }
+        blue:        { red: 0%,   green: 0%,   blue: 100% }
+        yellow:      { red: 100%, green: 100%, blue: 0%   }
+        purple:      { red: 100%, green: 0%,   blue: 100% }
+        randomize:   { effect: Fast Random                }
       white:
         cold:        { color_temperature: 153 mireds      }
         chilly:      { color_temperature: 275 mireds      }
@@ -119,8 +136,9 @@ binary_sensor:
         - ON for at least 0.8s
       then:
         - light.turn_on:
-            id: my_light
-            brightness: 1%
+            id: my_light_e131
+            effect: e131
+            brightness: 100%
 
   # When tapping the color button, activate the next preset.
   # When holding the color button, activate the next preset group.
