@@ -72,7 +72,7 @@ light:
       - e131:
           name: "e131"
           universe: 1
-          channels: RGBW
+          channels: RGB
   - platform: xiaomi_bslamp2
     id: my_light
     name: ${light_name}
