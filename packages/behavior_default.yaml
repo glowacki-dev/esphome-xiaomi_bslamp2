@@ -63,10 +63,10 @@ e131:
 # This component controls the LED lights of the lamp.
 light:
   - platform: partition
-    id: my_light
+    id: my_light_e131
     name: ${light_name}
     segments:
-      - single_light_id: my_light_internal
+      - single_light_id: my_light
     # You can use any effects that you like. These are just examples.
     effects:
       - e131:
@@ -74,7 +74,7 @@ light:
           universe: 1
           channels: RGBW
   - platform: xiaomi_bslamp2
-    id: my_light_internal
+    id: my_light
     default_transition_length: ${default_transition_length}
     internal: true
     # When the brightness changes, update the front panel illumination.
@@ -113,12 +113,12 @@ binary_sensor:
     - timing:
         - ON for at most 0.8s
       then:
-        - light.toggle: my_light_internal
+        - light.toggle: my_light
     - timing:
         - ON for at least 0.8s
       then:
         - light.turn_on:
-            id: my_light_internal
+            id: my_light
             brightness: 1%
 
   # When tapping the color button, activate the next preset.
@@ -153,7 +153,7 @@ sensor:
     on_value:
       then:
         - light.turn_on:
-            id: my_light_internal
+            id: my_light
             brightness: !lambda return x;
 
 # This text sensor propagates the currently active light mode.
