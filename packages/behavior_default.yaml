@@ -65,29 +65,14 @@ light:
   - platform: partition
     id: my_light
     name: ${light_name}
-    # When the brightness changes, update the front panel illumination.
-    on_brightness:
-      then:
-        - globals.set:
-            id: current_brightness
-            value: !lambda return x;
-        - script.execute: update_front_panel
     segments:
       - single_light_id: my_light_internal
-    effects:
-      - e131:
-          universe: 1
-          channels: RGBW
     # You can use any effects that you like. These are just examples.
     effects:
-      - random:
-          name: "Slow Random"
-          transition_length: 30s
-          update_interval: 30s
-      - random:
-          name: "Fast Random"
-          transition_length: 3s
-          update_interval: 3s
+      - e131:
+          name: "e131"
+          universe: 1
+          channels: RGBW
     # You can define one or more groups of presets. These presets can
     # be activated using various "preset.activate" action options.
     # The presets can for example be used to mimic the behavior of the
@@ -97,12 +82,7 @@ light:
     # the color button.
     presets:
       rgb:
-        red:         { red: 100%, green: 0%,   blue: 0%   }
-        green:       { red: 0%,   green: 100%, blue: 0%   }
-        blue:        { red: 0%,   green: 0%,   blue: 100% }
-        yellow:      { red: 100%, green: 100%, blue: 0%   }
-        purple:      { red: 100%, green: 0%,   blue: 100% }
-        randomize:   { effect: Fast Random                }
+        e131:        { effect: e131                       }
       white:
         cold:        { color_temperature: 153 mireds      }
         chilly:      { color_temperature: 275 mireds      }
@@ -111,7 +91,14 @@ light:
   - platform: xiaomi_bslamp2
     id: my_light_internal
     default_transition_length: ${default_transition_length}
-    # internal: true
+    internal: true
+    # When the brightness changes, update the front panel illumination.
+    on_brightness:
+      then:
+        - globals.set:
+            id: current_brightness
+            value: !lambda return x;
+        - script.execute: update_front_panel
 
 # Binary sensors can be created for handling front panel touch / release
 # events. To specify what part of the front panel to look at, the "for"
@@ -126,12 +113,12 @@ binary_sensor:
     - timing:
         - ON for at most 0.8s
       then:
-        - light.toggle: my_light
+        - light.toggle: my_light_internal
     - timing:
         - ON for at least 0.8s
       then:
         - light.turn_on:
-            id: my_light
+            id: my_light_internal
             brightness: 1%
 
   # When tapping the color button, activate the next preset.
@@ -166,7 +153,7 @@ sensor:
     on_value:
       then:
         - light.turn_on:
-            id: my_light
+            id: my_light_internal
             brightness: !lambda return x;
 
 # This text sensor propagates the currently active light mode.
