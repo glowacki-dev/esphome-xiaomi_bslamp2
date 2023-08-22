@@ -63,16 +63,16 @@ e131:
 # This component controls the LED lights of the lamp.
 light:
   - platform: partition
+    id: my_light
     name: ${light_name}
     segments:
-      - single_light_id: my_light
+      - single_light_id: my_light_internal
     effects:
       - e131:
           universe: 1
           channels: RGBW
   - platform: xiaomi_bslamp2
-    id: my_light
-    name: ${light_name}
+    id: my_light_internal
     default_transition_length: ${default_transition_length}
     internal: true
 
